@@ -1,14 +1,23 @@
 package main
 
 import (
-	"fmt"
+	"github.com/codegangsta/cli"
 	"net/http"
+	"os"
 )
 
 func main() {
-	resp, err := http.Get("http://www.google.com")
-	PanicIf(err)
-	fmt.Println(resp.Status)
+	app := cli.NewApp()
+	app.Name = "sitechecker"
+	app.Usage = "Site Checker"
+
+	app.Action = func(c *cli.Context) {
+		resp, err := http.Get(c.Args()[0])
+		PanicIf(err)
+		println("Status ", resp.Status)
+	}
+
+	app.Run(os.Args)
 }
 
 func PanicIf(err error) {
