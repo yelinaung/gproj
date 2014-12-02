@@ -8,13 +8,21 @@ import (
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "sitechecker"
+	app.Name = "Sitechecker"
 	app.Usage = "Site Checker"
+	app.Version = "0.1.0"
 
 	app.Action = func(c *cli.Context) {
-		resp, err := http.Get(c.Args()[0])
-		PanicIf(err)
-		println("Status ", resp.Status)
+		args := c.Args()
+		if len(args) == 0 {
+			println("Error: ", "Argument cannot be empty!")
+		} else {
+			resp, err := http.Get(args[0])
+			if err != nil {
+				PanicIf(err)
+			}
+			println("Status ", resp.Status)
+		}
 	}
 
 	app.Run(os.Args)
