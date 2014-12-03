@@ -1,10 +1,18 @@
 package main
 
 import (
+	"encoding/json"
 	"github.com/codegangsta/cli"
+	"io/ioutil"
 	"net/http"
 	"os"
 )
+
+type Configuration struct {
+	Period   string `json:"period"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
 
 func main() {
 	app := cli.NewApp()
@@ -33,4 +41,17 @@ func PanicIf(err error) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func readConfig() Configuration {
+	file, err := ioutil.ReadFile("config.json")
+	PanicIf(err)
+
+	config := Configuration{}
+	err = json.Unmarshal(file, &config)
+	if err != nil {
+		PanicIf(err)
+	}
+
+	return config
 }
