@@ -20,8 +20,9 @@ func main() {
 			resp, err := http.Get(args[0])
 			if err != nil {
 				PanicIf(err)
+			} else {
+				println("Status ", resp.Status)
 			}
-			println("Status ", resp.Status)
 		}
 	}
 
