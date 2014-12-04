@@ -2,8 +2,9 @@ package main
 
 import (
 	"github.com/codegangsta/cli"
-	"github.com/yelinaung/gproj/sc/config"
+	// "github.com/yelinaung/gproj/sc/config"
 	"net/http"
+	"os"
 )
 
 func main() {
@@ -17,19 +18,14 @@ func main() {
 		if len(args) == 0 {
 			println("Error: ", "Argument cannot be empty!")
 		} else {
-			resp, err := http.Get(args[0])
-			if err != nil {
-				PanicIf(err)
-			} else {
-				println("Status ", resp.Status)
-			}
+			println(CheckStatus(args[0]).Status)
 		}
 	}
 
-	// app.Run(os.Args)
+	app.Run(os.Args)
 	//config := config.Config{}
-	c := config.ReadConfig()
-	println(c.Email)
+	// c := config.ReadConfig()
+	// println(c.Email)
 }
 
 func PanicIf(err error) {
@@ -38,6 +34,8 @@ func PanicIf(err error) {
 	}
 }
 
-func CheckStatus(link string) http.Status {
+func CheckStatus(link string) *http.Response {
 	resp, err := http.Get(link)
+	PanicIf(err)
+	return resp
 }
