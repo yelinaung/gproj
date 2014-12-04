@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/codegangsta/cli"
-	// "github.com/yelinaung/gproj/sc/config"
+	"github.com/yelinaung/gproj/sc/config"
 	"net/http"
 	"os"
 )
@@ -18,14 +18,18 @@ func main() {
 		if len(args) == 0 {
 			println("Error: ", "Argument cannot be empty!")
 		} else {
-			println(CheckStatus(args[0]).Status)
+			status := CheckStatus(args[0]).StatusCode
+			if status == http.StatusInternalServerError {
+				println("Error!")
+			} else {
+				println("OK!")
+			}
 		}
 	}
 
+	c := config.ReadConfig()
+	println(c.Email)
 	app.Run(os.Args)
-	//config := config.Config{}
-	// c := config.ReadConfig()
-	// println(c.Email)
 }
 
 func PanicIf(err error) {
