@@ -1,18 +1,10 @@
 package main
 
 import (
-	"encoding/json"
 	"github.com/codegangsta/cli"
-	"io/ioutil"
+	"github.com/yelinaung/gproj/sc/config"
 	"net/http"
-	"os"
 )
-
-type Configuration struct {
-	Period   string `json:"period"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
 
 func main() {
 	app := cli.NewApp()
@@ -34,7 +26,10 @@ func main() {
 		}
 	}
 
-	app.Run(os.Args)
+	// app.Run(os.Args)
+	//config := config.Config{}
+	c := config.ReadConfig()
+	println(c.Email)
 }
 
 func PanicIf(err error) {
@@ -43,15 +38,6 @@ func PanicIf(err error) {
 	}
 }
 
-func readConfig() Configuration {
-	file, err := ioutil.ReadFile("config.json")
-	PanicIf(err)
-
-	config := Configuration{}
-	err = json.Unmarshal(file, &config)
-	if err != nil {
-		PanicIf(err)
-	}
-
-	return config
+func CheckStatus(link string) http.Status {
+	resp, err := http.Get(link)
 }
