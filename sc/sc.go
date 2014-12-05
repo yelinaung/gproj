@@ -2,9 +2,12 @@ package main
 
 import (
 	"github.com/codegangsta/cli"
+	"github.com/rakyll/ticktock"
+	"github.com/rakyll/ticktock/t"
 	"github.com/yelinaung/gproj/sc/config"
 	"net/http"
 	"os"
+	"time"
 )
 
 func main() {
@@ -26,15 +29,15 @@ func main() {
 			configPath := c.String("config")
 			conf := config.ReadConfig(configPath)
 
-			println(conf.Email)
 			println("URL is : ", conf.URL)
 
-			status := CheckStatus(conf.URL).StatusCode
-			if status == http.StatusInternalServerError {
-				println("Status : ", "Error!")
-			} else {
-				println("Status : ", "OK!")
-			}
+			err := ticktock.Schedule(
+				"site check",
+				&CheckJob{conf.Period, conf.URL},
+				&t.When{Every: t.Every(3).Seconds()})
+			ticktock.Start()
+			PanicIf(err)
+
 		} else {
 			println("Error: ", "Please point to proper config.json")
 		}
@@ -53,4 +56,19 @@ func CheckStatus(link string) *http.Response {
 	resp, err := http.Get(link)
 	PanicIf(err)
 	return resp
+}
+
+type CheckJob struct {
+	Interval time.Duration
+	URL      string
+}
+
+func (cj *CheckJob) Run() error {
+	status := CheckStatus(cj.URL).StatusCode
+	if status == http.StatusInternalServerError {
+		println("Status : ", "Error!")
+	} else {
+		println("Status : ", "OK!")
+	}
+	return nil
 }

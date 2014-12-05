@@ -3,13 +3,14 @@ package config
 import (
 	"encoding/json"
 	"io/ioutil"
+	"time"
 )
 
 type Config struct {
-	Period   string `json:"period"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	URL      string `json:"url"`
+	Period   time.Duration `json:"period"`
+	Email    string        `json:"email"`
+	Password string        `json:"password"`
+	URL      string        `json:"url"`
 }
 
 func ReadConfig(filename string) Config {
