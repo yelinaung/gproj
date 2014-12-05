@@ -7,7 +7,6 @@ import (
 	"github.com/yelinaung/gproj/sc/config"
 	"net/http"
 	"os"
-	"time"
 )
 
 func main() {
@@ -33,11 +32,13 @@ func main() {
 
 			err := ticktock.Schedule(
 				"site check",
-				&CheckJob{conf.Period, conf.URL},
-				&t.When{Every: t.Every(3).Seconds()})
+				&CheckJob{
+					conf.URL,
+				},
+				&t.When{
+					Every: t.Every(conf.Interval).Seconds()})
 			ticktock.Start()
 			PanicIf(err)
-
 		} else {
 			println("Error: ", "Please point to proper config.json")
 		}
@@ -59,8 +60,7 @@ func CheckStatus(link string) *http.Response {
 }
 
 type CheckJob struct {
-	Interval time.Duration
-	URL      string
+	URL string
 }
 
 func (cj *CheckJob) Run() error {

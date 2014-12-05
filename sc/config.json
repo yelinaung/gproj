@@ -1,6 +1,4 @@
 {
-  "period": "5000",
-  "email": "hello@yelinaung.com",
-  "password":"freelunch!",
+  "period": 5,
   "url": "http://www.google.com"
 }

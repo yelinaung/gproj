@@ -3,12 +3,11 @@ package config
 import (
 	"encoding/json"
 	"io/ioutil"
-	"time"
 )
 
 type Config struct {
-	Period time.Duration `json:"period"`
-	URL    string        `json:"url"`
+	Interval int    `json:"period"`
+	URL      string `json:"url"`
 }
 
 func ReadConfig(filename string) Config {
