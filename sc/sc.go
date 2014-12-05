@@ -10,7 +10,7 @@ import (
 func main() {
 	app := cli.NewApp()
 	app.Name = "Sitechecker"
-	app.Usage = "Site Checker"
+	app.Usage = "Just a configurable Site Checker"
 	app.Version = "0.1.0"
 
 	app.Flags = []cli.Flag{
@@ -22,7 +22,7 @@ func main() {
 	}
 
 	app.Action = func(c *cli.Context) {
-		if c.String("config") == "config.json" {
+		if c.String("config") == "config.json" || c.String("c") == "config.json" {
 			configPath := c.String("config")
 			println("Hello", configPath)
 			conf := config.ReadConfig(configPath)
