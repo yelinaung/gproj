@@ -24,15 +24,16 @@ func main() {
 	app.Action = func(c *cli.Context) {
 		if c.String("config") == "config.json" || c.String("c") == "config.json" {
 			configPath := c.String("config")
-			println("Hello", configPath)
 			conf := config.ReadConfig(configPath)
+
 			println(conf.Email)
+			println("URL is : ", conf.URL)
 
 			status := CheckStatus(conf.URL).StatusCode
 			if status == http.StatusInternalServerError {
-				println("Error!")
+				println("Status : ", "Error!")
 			} else {
-				println("OK!")
+				println("Status : ", "OK!")
 			}
 		} else {
 			println("Error: ", "Please point to proper config.json")
