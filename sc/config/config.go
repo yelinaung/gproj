@@ -9,10 +9,11 @@ type Config struct {
 	Period   string `json:"period"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
+	URL      string `json:"url"`
 }
 
-func ReadConfig() Config {
-	file, err := ioutil.ReadFile("config.json")
+func ReadConfig(filename string) Config {
+	file, err := ioutil.ReadFile(filename)
 	PanicIf(err)
 
 	config := Config{}

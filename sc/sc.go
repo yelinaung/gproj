@@ -13,22 +13,32 @@ func main() {
 	app.Usage = "Site Checker"
 	app.Version = "0.1.0"
 
+	app.Flags = []cli.Flag{
+		cli.StringFlag{
+			Name:  "config, c",
+			Value: "config.json",
+			Usage: "path to config.json",
+		},
+	}
+
 	app.Action = func(c *cli.Context) {
-		args := c.Args()
-		if len(args) == 0 {
-			println("Error: ", "Argument cannot be empty!")
-		} else {
-			status := CheckStatus(args[0]).StatusCode
+		if c.String("config") == "config.json" {
+			configPath := c.String("config")
+			println("Hello", configPath)
+			conf := config.ReadConfig(configPath)
+			println(conf.Email)
+
+			status := CheckStatus(conf.URL).StatusCode
 			if status == http.StatusInternalServerError {
 				println("Error!")
 			} else {
 				println("OK!")
 			}
+		} else {
+			println("Error: ", "Please point to proper config.json")
 		}
 	}
 
-	c := config.ReadConfig()
-	println(c.Email)
 	app.Run(os.Args)
 }
 
